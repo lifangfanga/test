@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 发布订阅模式实现
+    // 1、首先想好谁是发布者（比如上边的APP的NBA专栏就是发布者）；
+    // 2、然后给发布者添加一个缓存列表，用于存放回调函数来通知订阅者（比如上面的我们球迷爱好者收藏了NBA专栏，相当于向发布者注入了通知我们的函数）
+    // 3、最后就是发布消息，发布者遍历这个缓存列表，依次触发订阅的函数。发布时把缓存列表依次执行
+
+    // 自定义一个NBA专栏对象（发布者）
+    let NBAcol = {}
+    // 放一个列表来缓存订阅者（信息接收者）的回调函数
+    NBAcol.list = {}
+    // on 监听事件
+    NBAcol.on = function (key, fun) {
+      // 如果还没有订阅过此类消息，给该类信息创建一个缓存列表
+      if (!this.list[key]) {
+        this.list[key] = []
+      }
+      // 把fn先存到列表中
+      this.list[key].push(fun)
+    }
+    // 发布事件
+    NBAcol.emit = function () {
+      // 取出消息类型名称
+      let key = Array.prototype.shift.call(arguments)
+      // 匹配对应的回调函数的结合
+      let funs = this.list[key]
+      // 没有订阅消息，则return
+      if (!funs || funs.length === 0) {
+        return
+      }
+      // 发布的时候把缓存里的列表依次执行
+      funs.forEach(fun => {
+        fun.apply(this, arguments)
+      })
+    }
+    // 小明的订阅NBA专栏
+    NBAcol.on('xiaoming', function (team) {
+      console.log("我订阅的球队是:" + team)
+    })
+    // 发布事件
+    NBAcol.emit('xiaoming', '湖人')
+
+    // 调用事件调度中心
+    let ids = 0
+    let observer_ids = 0
+    // 订阅者
+    class subscriber {
+      constructor(dispatcher) {
+        this.dispatcher = dispatcher
+        this.id = observer_ids++
+      }
+      subscribe(type) {
+        this.dispatcher.subscribe(type, this)
+      }
+      doUpdate(type, arg) {
+        console.log("接受到消息" + arg)
+      }
+    }
+    // 调度中心
+    class Dispatcher {
+      constructor() {
+        this.dispatcher = {}
+        this.id = ids++
+      }
+      // 订阅
+      subscribe(type, subscriber) {
+        if (!this.dispatcher[type]) {
+          this.dispatcher[type] = []
+        }
+        this.dispatcher[type].push(subscriber)
+      }
+      // 发布
+      publish(type, args) {
+        let subscribers = this.dispatcher[type]
+        // 没有订阅的消息，return
+        if (!subscribers || subscribers.length) return
+        // 循环订阅的消息列表，依次执行函数
+        subscribers.forEach(subscriber => {
+          subscribe.doUpdate(type, args)
+        })
+      }
+    }
+    // 定义了一个Reader类，该类通过extends关键字继承了父类subscriber所有的属性和方法
+    class Reader extends subscriber {
+      constructor(name, dispatcher) {
+        // super关键字，它在这里表示父类的构造函数，用来新建父类的this对象
+        super(dispatcher)
+        this.name = name
+      }
+      doUpdate(type, st) {
+        console.log(this.name + `阅读了--${type}--公众号的文章`)
+      }
+    }
+    // 定义一个 WeiX类 来继承发布者所有的类
+    class WeiX extends Dispatcher {
+      constructor(name) {
+        super()
+        this.name = name
+      }
+      publishArticle(type) {
+        this.publish(type)
+      }
+    }
+
+    // 微信公众号平台
+    let wx1 = new WeiX()
+    // 读者们
+    let reader1 = new Reader('小明', wx1)
+    let reader2 = new Reader('小玲', wx1)
+    // 读者订阅公众号
+    reader1.subscribe('前端')
+    reader2.subscribe('数据库')
+    // 公众号发布文章
+    wx1.publishArticle('前端')
+    wx1.publishArticle('数据库')
+  </script>
+</body>
+
+</html>

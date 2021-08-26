@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var obj = { '0': 'a', '1': 'b', '2': 'c' };
+    Object.keys(obj).forEach(function (key) {
+      console.log(key, obj[key])
+    })
+    var obj = { a: '小站', b: '网易宝', c: '鹅厂' }
+    for (const key in obj) {
+      console.log(obj[key])
+    }
+    // ...扩展运算符  ...把数组转换为用逗号隔开的参数序列
+    console.log([1, 2, 3])
+    // 取到数组的第一个元素
+    const tabArray = [1, 2, 3]
+    const [first] = tabArray
+    console.log(first, 'first')
+  </script>
+</body>
+
+</html>

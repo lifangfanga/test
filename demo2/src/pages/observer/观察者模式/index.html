@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 观察者模式js实现 : 观察者和被观察者直接交互，当被观察者发出某些行为或改变时，观察者会收到通知做出相应的处理
+    // 定义观察者
+    let observer_ids = 0
+    // 定义被观察者
+    let observed_ids = 0
+    //  观察者类
+    // es6的类(class) 新的class写法只是让对象原型的写法更加清晰，更向面向对象编程的语法
+    class Observer {
+      // 构造方法 constructor
+      constructor() {
+        this.id = observer_ids++
+      }
+      // 观测到变化后的处理
+      update(ob) {
+        console.log('观察者' + this.id + `检测到被观察者${ob.id}变化`)
+      }
+    }
+    // 被观察者列
+    class Observed {
+      constructor() {
+        this.observers = []
+        this.id = observed_ids++
+      }
+      // 添加观察者
+      addObserver(observer) {
+        this.observers.push(observer)
+      }
+      // 删除观察者
+      removeObserver(observer) {
+        this.observers = this.observers.filter((o) => {
+          return o.id !== observer.id
+        })
+      }
+      // 通知所有的观察者
+      notify() {
+        this.observers.forEach(observer => {
+          observer.update(this)
+        })
+      }
+    }
+    // 被观察者
+    // mObserved是Observed 的实例
+    let mObserved = new Observed()
+    // 观察者1
+    let mObserver1 = new Observer()
+    // 观察者2
+    let mObserver2 = new Observer()
+    // Observed里面的添加观察者的方法
+    mObserved.addObserver(mObserver1)
+    mObserved.addObserver(mObserver2)
+    //被观察者通知观察者，调用被观察者的通知所有观察者的方法
+    mObserved.notify()
+    // 打印 观察者0检测到被观察者0变化
+    //      观察者1检测到被观察者0变化
+  </script>
+</body>
+
+</html>

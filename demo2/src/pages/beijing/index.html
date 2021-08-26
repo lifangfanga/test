@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+  <title>腾讯地图-卫星地图</title>
+  <meta name="viewport"
+    content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <script charset="utf-8" src="https://map.qq.com/api/js?v=2.exp&key=OB4BZ-D4W3U-B7VVO-4PJWW-6TKDJ-WPB77"></script>
+  <style type="text/css">
+    * {
+      margin: 0px;
+      padding: 0px;
+    }
+
+    body,
+    button,
+    input,
+    select,
+    textarea {
+      font: 12px/22px Verdana, Helvetica, Arial, sans-serif;
+    }
+
+    html,
+    body {
+      height: 100%;
+      margin: 0px;
+      padding: 0px;
+    }
+
+    #container {
+      width: 100%;
+      height: 100%
+    }
+  </style>
+</head>
+
+<body onload="init()">
+  <div id="container"></div>
+  <script type="text/javascript">
+    function init() {
+      var map = new qq.maps.Map(document.getElementById("container"), {
+        // 地图的中心地理坐标。
+        center: new qq.maps.LatLng(39.916527, 116.397128),
+
+        //该地图类型显示普通的街道地图。
+        mapTypeId: qq.maps.MapTypeId.ROADMAP
+
+        //该地图类型显示卫星图像。
+        // mapTypeId: qq.maps.MapTypeId.SATELLITE
+
+        //该地图类型显示卫星图像上的主要街道透明层。
+        // mapTypeId: qq.maps.MapTypeId.HYBRID
+      });
+    }
+  </script>
+</body>
+
+</html>

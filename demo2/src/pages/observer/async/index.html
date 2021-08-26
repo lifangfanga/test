@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    // 用async/await来处理异步，是对于promise的优化，async用于申明一个function 是异步的，await用于等待一个异步方法执行完成
+    function getSomeThing() {
+      return 'something'
+    }
+
+    async function testAsync() {
+      return Promise.resolve('hello async')
+    }
+
+    async function test() {
+      // 等待一个异步方法执行完成 返回结果(promise,函数，表达式),await 等待的是一个返回的结果
+      const v1 = await getSomeThing()
+      const v2 = await testAsync()
+      console.log(v1 + v2)
+    }
+    // 调用
+    test()
+
+    //  async/await中错误处理
+    // promise 并不是只有一种resolve(成功)的结果，还有一种reject(失败)的结果
+    // 用 try-catch来做错误处理
+    async function myFunction() {
+      try {
+        await Promise.reject('1')
+      } catch (err) {
+        console.log(err)
+      }
+    }
+    myFunction()
+
+    // 用promise的catch来做错误捕获
+    async function promiseFunction() {
+      await Promise.reject('捕获错误').catch((err) => {
+        console.log(err)
+      })
+    }
+    promiseFunction()
+
+    //await 不需要回调，很好的解决回调问题   请求是异步的
+    // 调用 awaitFunc 函数，它里面遇到了await，代码就暂停到这里，不再向下执行了，等后面的promise对象执行完毕，然后拿到promise resolve 的值并进行返回，返回值拿到之后，它继续向下执行。具体到代码, 遇到await 之后，代码就暂停执行了， 等待returnPromise执行完毕，1秒后，promise resolve了， 并返回了值， 这时await 才拿到返回值， 然后赋值给data， 暂停结束，代码才开始继续执行下一行console.log语句，最后输出'promise对象'字符串。
+    function returnPromise() {
+      return new Promise((resolve, reject) => {
+        setTimeout(() => {
+          resolve('promise对象')
+        }, 1000)
+      })
+    }
+    async function awaitFunc() {
+      let data = await returnPromise()
+      console.log(data)
+    }
+    awaitFunc()
+  </script>
+</body>
+
+</html>
