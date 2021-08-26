@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <script>
+    var a = { name: 111, age: 2, ss: 33, tt: 555 }
+    function sortArry(a) {
+      var num = Object.keys(a).sort()
+      var str = {}
+      for (var i = 0;i < num.length;i++) {
+        str[num[i]] = a[num[i]]
+      }
+      return str
+    }
+    console.log(sortArry(a))
+  </script>
+</body>
+
+</html>
